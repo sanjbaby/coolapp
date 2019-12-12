@@ -3,5 +3,5 @@ RUN pip install --upgrade pip
 RUN pip install flask
 RUN pip install pymysql
 RUN pip install ibm-cos-sdk
-RUN apk add --no-cache gcc libc-dev unixodbc-dev
+RUN apk add --no-cache g++ libc-dev unixodbc-dev
 RUN pip install pyodbc
