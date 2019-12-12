@@ -5,3 +5,7 @@ RUN pip install pymysql
 RUN pip install ibm-cos-sdk
 RUN apk add --no-cache g++ libc-dev unixodbc-dev
 RUN pip install pyodbc
+WORKDIR /app
+COPY . /app
+CMD ["python","main.py"]
+

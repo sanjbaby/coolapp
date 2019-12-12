@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 import pyodbc
 import ibm_boto3
 from ibm_botocore.client import Config, ClientError
-"""
+
 # Constants for IBM COS values
 COS_ENDPOINT = "https://s3.us-south.objectstorage.softlayer.net"  # Current list avaiable at https://control.cloud-object-storage.cloud.ibm.com/v2/endpoints
 COS_API_KEY_ID = "_bAzHuCAN1yPz4Rcg5CZY1Tbp0UOpshuMhpoNkIvJAa3"  # eg "W00YiRnLW4a3fTjHB-oiB-2ySfTrFBIQQWanc--P3byk"
@@ -38,7 +38,7 @@ except ClientError as be:
     print("CLIENT ERROR: {0}\n".format(be))
 except Exception as e:
     print("Unable to retrieve bucket contents: {0}".format(e))
-"""
+
 server = 'tcp:bluepanther.database.windows.net'
 database = 'blue'
 username = 'coolapp'
