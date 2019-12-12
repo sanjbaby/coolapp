@@ -19,28 +19,15 @@ RUN apt-get update && ACCEPT_EULA=Y apt-get install -y mssql-tools
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 RUN /bin/bash -c "source ~/.bashrc"
 
-# python libraries
-RUN apt-get update && apt-get install -y \
-    python-pip python-dev python-setuptools \
-    --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+  && apt-get install -y python3-pip python3-dev \
+  && cd /usr/local/bin \
+  && ln -s /usr/bin/python3 python \
+  && pip3 install --upgrade pip
 
-# install necessary locales
-RUN apt-get update && apt-get install -y locales \
-    && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
-    && locale-gen
-RUN pip install --upgrade pip
-
-# install SQL Server Python SQL Server connector module - pyodbc
-RUN pip install pyodbc
-RUN pip install flask
-RUN pip install ibm-cos-sdk
-
-# install additional utilities
-RUN apt-get update && apt-get install gettext nano vim -y
-
-# add sample code
+RUN pip3 install flask
+RUN pip3 install ibm-cos-sdk
+RUN pip3 install pyodbc
 WORKDIR /app
 COPY . /app
-
-CMD ["python","main.py"]
+CMD ["python3","main.py"]
