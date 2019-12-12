@@ -38,7 +38,7 @@ except ClientError as be:
     print("CLIENT ERROR: {0}\n".format(be))
 except Exception as e:
     print("Unable to retrieve bucket contents: {0}".format(e))
-"""
+
 server = 'tcp:bluepanther.database.windows.net'
 database = 'blue'
 username = 'coolapp'
@@ -46,7 +46,7 @@ password = 'cool@app1234'
 cnxn = pyodbc.connect(
         'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
 cursor = cnxn.cursor()
-"""
+
 app = Flask(__name__)
 app.secret_key = 'random string'
 UPLOAD_FOLDER = 'static/uploads'
