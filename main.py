@@ -262,11 +262,15 @@ def login():
 def productDescription():
     loggedIn, firstName, noOfItems = getLoginDetails()
     productId = request.args.get('productId')
-    with sqlite3.connect('database.db') as conn:
-        cur = conn.cursor()
-        cur.execute('SELECT productId, name, price, description, image, stock FROM products WHERE productId = ' + productId)
-        productData = cur.fetchone()
-    conn.close()
+    print(productId)
+    cnxn = pyodbc.connect(
+        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+
+    cursor = cnxn.cursor()
+    cursor.execute(
+        "select PSKU.Item_Number,PSKU.Desc_ription,PP.list_price,CONCAT(PP.Item_Number,\'.jpg\') as image,pp.InStock from coolapp.XXIBM_PRODUCT_SKU PSKU inner join coolapp.XXIBM_PRODUCT_PRICING PP on PP.Item_Number=PSKU.Item_Number where PSKU.Item_Number = " + productId)  # \'Clothing\'")
+    productData = cursor.fetchone()
+    cnxn.close()
     return render_template("productDescription.html", data=productData, loggedIn = loggedIn, firstName = firstName, noOfItems = noOfItems)
 
 @app.route("/addToCart")

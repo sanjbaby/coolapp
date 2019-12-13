@@ -42,7 +42,7 @@
 		<h1>{{data[1]}}</h1>
 	</div>
 	<div>
-		<img src={{url_for('static', filename='uploads/'+data[4]) }} id="productImage"/>
+		<img src={{url_for('static', filename='uploads/'+data[3]) }} id="productImage"/>
 	</div>
 
 	<div id="productDescription">
@@ -58,11 +58,9 @@
 			</tr>
 			<tr>
 				<td>Stock</td>
-				<td>{{data[5]}}</td>
+				<td>{{data[4]}}</td>
 			</tr>
 		</table>
-		<h2>Description</h2>
-		<p>{{data[3]}}</p>
 	</div>
 	<div id="addToCart">
 		<a href="/addToCart?productId={{request.args.get('productId')}}">Add to Cart</a>
