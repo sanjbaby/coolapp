@@ -43,9 +43,7 @@ server = 'tcp:bluepanther.database.windows.net'
 database = 'blue'
 username = 'coolapp'
 password = 'cool@app1234'
-cnxn = pyodbc.connect(
-        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
-cursor = cnxn.cursor()
+
 
 app = Flask(__name__)
 app.secret_key = 'random string'
@@ -72,7 +70,10 @@ def getLoginDetails():
 @app.route("/")
 def root():
     loggedIn, firstName, noOfItems = getLoginDetails()
+    cnxn = pyodbc.connect(
+        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
 
+    cursor = cnxn.cursor()
     cursor.execute('select distinct(family_name) from coolapp.XXIBM_PRODUCT_CATALOG')
     categoryData=[x[0] for x in cursor.fetchall()]
     list_ctg=[]
@@ -83,13 +84,7 @@ def root():
         list_ctg.append(row)
     itemData = parse(list_ctg)
 
-    with sqlite3.connect('database.db') as conn:
-        cur = conn.cursor()
-        cur.execute('SELECT productId, name, price, description, image, stock FROM products')
-        #itemData = cur.fetchall()
-        cur.execute('SELECT categoryId, name FROM categories')
-        #categoryData = cur.fetchall()
-    #itemData = parse(itemData)
+    cnxn.close()
     return render_template('home.html', itemData=itemData, loggedIn=loggedIn, firstName=firstName, noOfItems=noOfItems, categoryData=categoryData)
 
 @app.route("/add")
@@ -134,6 +129,7 @@ def addItem():
 def displayCategory():
         loggedIn, firstName, noOfItems = getLoginDetails()
         categoryId = request.args.get("categoryId")
+        print(categoryId)
         if categoryId =='C':
             categoryId ='\'Clothing\''
         elif categoryId =='F':
@@ -149,11 +145,16 @@ def displayCategory():
             categoryId ='\'Clothing\''
         print(categoryId)
         list_ctg=[]
+        cnxn = pyodbc.connect(
+            'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+
+        cursor = cnxn.cursor()
         cursor.execute("select  PSKU.Item_Number,PSKU.Desc_ription,PP.List_Price,CONCAT(PP.Item_Number,'.jpg') as img, PC.Family_Name,psku.SKUAtt_Value1,psku.SKUAtt_Value2 from coolapp.XXIBM_PRODUCT_CATALOG PC inner join coolapp.XXIBM_PRODUCT_SKU PSKU on PC.Commodity = PSKU.Catalogue_Category inner join coolapp.XXIBM_PRODUCT_PRICING PP on PSKU.Item_Number = PP.Item_Number where PC.family_name = " + categoryId)#\'Clothing\'")
         for row in cursor.fetchall():
             # print(row)
             row = list(row)
             list_ctg.append(row)
+        cnxn.close()
         if (len(list_ctg)) == 0:
             return render_template('No_Data.html')
 
@@ -161,14 +162,7 @@ def displayCategory():
             categoryName = list_ctg[0][4]
             data = parse(list_ctg)
 
-            with sqlite3.connect('database.db') as conn:
-                print('1')
-            #cur = conn.cursor()
-            #cur.execute("SELECT products.productId, products.name, products.price, products.image, categories.name FROM products, categories WHERE products.categoryId = categories.categoryId AND categories.categoryId = " + categoryId)
-            #data = cur.fetchall()
-            conn.close()
-        #categoryName = data[0][4]
-        #data = parse(data)
+
             return render_template('displayCategory.html', data=data, loggedIn=loggedIn, firstName=firstName, noOfItems=noOfItems, categoryName=categoryName)
 
 @app.route("/account/profile")
