@@ -10,7 +10,7 @@
 	<a href="/">
 		<img id="logo" src= {{ url_for('static', filename='images/logo.png') }} />
 	</a>
-	<form>
+	<form action="/searchop" method="POST">
 		<input id="searchBox" type="text" name="searchQuery">
 		<input id="searchButton" type="submit" value="Search">
 	</form>

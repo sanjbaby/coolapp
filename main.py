@@ -87,6 +87,40 @@ def root():
     cnxn.close()
     return render_template('home.html', itemData=itemData, loggedIn=loggedIn, firstName=firstName, noOfItems=noOfItems, categoryData=categoryData)
 
+@app.route('/searchop',methods = ['GET','POST'])
+def result():
+    loggedIn, firstName, noOfItems = getLoginDetails()
+    if request.method == 'POST':
+        result = request.form
+        #print(result, "Hi From Result")
+        result=result['searchQuery']
+        result=result.upper()
+        result="\'%"+str(result)+"%\'"
+        #print(result,"actual result")
+
+    list_ctg = []
+    cnxn = pyodbc.connect(
+        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+
+    cursor = cnxn.cursor()
+    cursor.execute( "select  PSKU.Item_Number,PSKU.Desc_ription,PP.List_Price,CONCAT(PP.Item_Number,'.jpg') as img, PC.Family_Name,psku.SKUAtt_Value1,psku.SKUAtt_Value2 from coolapp.XXIBM_PRODUCT_CATALOG PC inner join coolapp.XXIBM_PRODUCT_SKU PSKU on PC.Commodity = PSKU.Catalogue_Category inner join coolapp.XXIBM_PRODUCT_PRICING PP on PSKU.Item_Number = PP.Item_Number where upper(PSKU.Desc_ription) like" + result + "or upper(PSKU.Long_Description) like" + result)
+    for row in cursor.fetchall():
+        # print(row)
+        row = list(row)
+        list_ctg.append(row)
+    cnxn.close()
+    if (len(list_ctg)) == 0:
+        return render_template('No_Data.html')
+
+    else:
+        categoryName = list_ctg[0][4]
+        data = parse(list_ctg)
+
+        return render_template('searchop.html', data=data, loggedIn=loggedIn, firstName=firstName,
+                               noOfItems=noOfItems, categoryName=categoryName)
+
+
+
 @app.route("/add")
 def admin():
     with sqlite3.connect('database.db') as conn:
