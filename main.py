@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 import pyodbc
 import ibm_boto3
 from ibm_botocore.client import Config, ClientError
-
+"""
 # Constants for IBM COS values
 COS_ENDPOINT = "https://s3.us-south.objectstorage.softlayer.net"  # Current list avaiable at https://control.cloud-object-storage.cloud.ibm.com/v2/endpoints
 COS_API_KEY_ID = "_bAzHuCAN1yPz4Rcg5CZY1Tbp0UOpshuMhpoNkIvJAa3"  # eg "W00YiRnLW4a3fTjHB-oiB-2ySfTrFBIQQWanc--P3byk"
@@ -38,7 +38,7 @@ except ClientError as be:
     print("CLIENT ERROR: {0}\n".format(be))
 except Exception as e:
     print("Unable to retrieve bucket contents: {0}".format(e))
-
+"""
 server = 'tcp:bluepanther.database.windows.net'
 database = 'blue'
 username = 'coolapp'
@@ -71,7 +71,7 @@ def getLoginDetails():
 def root():
     loggedIn, firstName, noOfItems = getLoginDetails()
     cnxn = pyodbc.connect(
-        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+        'DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
 
     cursor = cnxn.cursor()
     cursor.execute('select distinct(family_name) from coolapp.XXIBM_PRODUCT_CATALOG')
@@ -100,7 +100,7 @@ def result():
 
     list_ctg = []
     cnxn = pyodbc.connect(
-        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+        'DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
 
     cursor = cnxn.cursor()
     cursor.execute( "select  PSKU.Item_Number,PSKU.Desc_ription,PP.List_Price,CONCAT(PP.Item_Number,'.jpg') as img, PC.Family_Name,psku.SKUAtt_Value1,psku.SKUAtt_Value2 from coolapp.XXIBM_PRODUCT_CATALOG PC inner join coolapp.XXIBM_PRODUCT_SKU PSKU on PC.Commodity = PSKU.Catalogue_Category inner join coolapp.XXIBM_PRODUCT_PRICING PP on PSKU.Item_Number = PP.Item_Number where upper(PSKU.Desc_ription) like" + result + "or upper(PSKU.Long_Description) like" + result)
@@ -180,7 +180,7 @@ def displayCategory():
         print(categoryId)
         list_ctg=[]
         cnxn = pyodbc.connect(
-            'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+            'DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
 
         cursor = cnxn.cursor()
         cursor.execute("select  PSKU.Item_Number,PSKU.Desc_ription,PP.List_Price,CONCAT(PP.Item_Number,'.jpg') as img, PC.Family_Name,psku.SKUAtt_Value1,psku.SKUAtt_Value2 from coolapp.XXIBM_PRODUCT_CATALOG PC inner join coolapp.XXIBM_PRODUCT_SKU PSKU on PC.Commodity = PSKU.Catalogue_Category inner join coolapp.XXIBM_PRODUCT_PRICING PP on PSKU.Item_Number = PP.Item_Number where PC.family_name = " + categoryId)#\'Clothing\'")
@@ -298,7 +298,7 @@ def productDescription():
     productId = request.args.get('productId')
     print(productId)
     cnxn = pyodbc.connect(
-        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+        'DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
 
     cursor = cnxn.cursor()
     cursor.execute(
