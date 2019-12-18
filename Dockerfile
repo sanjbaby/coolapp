@@ -46,7 +46,6 @@ RUN pip3 install flask
 RUN pip3 install ibm-cos-sdk
 RUN pip3 install pyodbc
 RUN pip3 install wave
-RUN pip3 install time
 RUN pip3 install requests
 
 WORKDIR /app
