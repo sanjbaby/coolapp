@@ -3,7 +3,7 @@
 FROM ubuntu:16.04
 
 # apt-get and system utilities
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get dist-upgrade && apt-get install -y \
     curl apt-utils apt-transport-https debconf-utils gcc build-essential g++-5\
     && rm -rf /var/lib/apt/lists/*
 
