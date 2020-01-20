@@ -44,7 +44,7 @@ except ClientError as be:
 except Exception as e:
     print("Unable to retrieve bucket contents: {0}".format(e))
 """
-server = 'tcp:bluepanther.database.windows.net'
+server = 'tcp:bluepanther1.database.windows.net'
 database = 'blue'
 username = 'coolapp'
 password = 'cool@app1234'
