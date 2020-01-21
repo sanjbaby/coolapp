@@ -5,7 +5,7 @@ RUN groupadd -g 999 appuser && \
     useradd -r -u 999 -g appuser appuser
 
 # apt-get and system utilities
-RUN apt-get update && apt-get -y dist-upgrade && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     curl apt-utils apt-transport-https debconf-utils gcc build-essential g++-5\
     && rm -rf /var/lib/apt/lists/*
 
