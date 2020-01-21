@@ -55,5 +55,6 @@ COPY . /app
 RUN chmod 777 /app
 RUN chmod 777 /app/main.py
 RUN chmod 755 -R /usr/local/lib/
+RUN chmod 766 /etc/passwd
 USER appuser
 CMD ["python3","main.py"]
