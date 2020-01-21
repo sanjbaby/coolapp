@@ -54,5 +54,6 @@ WORKDIR /app
 COPY . /app
 RUN chmod 777 /app
 RUN chmod 777 /app/main.py
+RUN chmod 755 -R /usr/local/lib/
 USER appuser
 CMD ["python3","main.py"]
