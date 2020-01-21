@@ -2,6 +2,9 @@
 # Python runtime with pyodbc to connect to SQL Server
 FROM ubuntu:16.04
 
+RUN groupadd -g 999 appuser && \
+    useradd -r -u 999 -g appuser appuser
+
 # apt-get and system utilities
 RUN apt-get update && apt-get -y dist-upgrade && apt-get install -y \
     curl apt-utils apt-transport-https debconf-utils gcc build-essential g++-5\
@@ -50,4 +53,5 @@ RUN pip3 install requests
 
 WORKDIR /app
 COPY . /app
+USER appuser
 CMD ["python3","main.py"]
